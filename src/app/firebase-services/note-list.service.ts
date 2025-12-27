@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { collectionData, Firestore, collection, doc, onSnapshot } from '@angular/fire/firestore';
+import { collectionData, Firestore, collection, addDoc, doc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Note } from '../interfaces/note.interface';
 
@@ -43,6 +43,14 @@ export class NoteListService {
   // const itemCollection = collection(this.firestore, 'items');
 
 
+  async addNote(item: {}) {
+    await addDoc(this.getNotesRef(), item).catch(
+      (err) => { console.error(err) }
+    ).then(
+      (docRef) => { console.log("Document written with ID: ", docRef?.id); }
+    )
+  }
+
   /**
  * Destroys all Firestore listeners and unsubscribes from the 'items' collection.
  *This function should be called in the ngOnDestroy lifecycle hook of the component.
@@ -67,7 +75,6 @@ export class NoteListService {
       });
     });
   }
-
 
 
   /**
