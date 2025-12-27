@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@angular/fire": "^17.0.0"
+  },
+  "devDependencies": {}
+}

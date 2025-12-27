@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "danotes-a4073": {
+      "hosting": {
+        "danotes": [
+          "danotes-a4073"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "danotes-a4073"
+  }
+}
