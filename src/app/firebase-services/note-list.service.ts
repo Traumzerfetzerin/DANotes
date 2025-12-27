@@ -14,42 +14,92 @@ export class NoteListService {
   trashNotes: Note[] = [];
   normalNotes: Note[] = [];
 
-  items$;
-  items;
+  // items$;
+  // items;
 
-  unsubList;
-  unsubSingle;
+  unsubTrash;
+  unsubNotes;
 
   firestore: Firestore = inject(Firestore);
 
 
   constructor() {
+    this.unsubNotes = this.subNotesList();
+    this.unsubTrash = this.subTrashList();
 
-    this.unsubList = onSnapshot(this.getNotesRef(), (list) => {
-      list.forEach(element => {
-        console.log(element);
-      });
-    });
+    // this.unsubNotes = onSnapshot(this.getSingleDocRef("notes", "123456"), (element) => {
+    // });
 
 
-    this.unsubSingle = onSnapshot(this.getSingleDocRef("notes", "123456"), (element) => {
-    });
-
-    this.unsubSingle();
-    this.unsubList();
-
-    
-    this.items$ = collectionData(this.getNotesRef())
-    this.items = this.items$.subscribe((list) => {
-      list.forEach(element => {
-        console.log(element);
-      });
-    });
-    this.items.unsubscribe();
+    // this.items$ = collectionData(this.getNotesRef())
+    // this.items = this.items$.subscribe((list) => {
+    //   list.forEach(element => {
+    //     console.log(element);
+    //   });
+    // });
   }
 
 
   // const itemCollection = collection(this.firestore, 'items');
+
+
+  /**
+ * Destroys all Firestore listeners and unsubscribes from the 'items' collection.
+ *This function should be called in the ngOnDestroy lifecycle hook of the component.
+ */
+  ngonDestroy() {
+    this.unsubNotes();
+    this.unsubTrash();
+    // this.items.unsubscribe();
+  }
+
+
+  /**
+   * Subscribes to the 'notes' collection and logs each element in the list to the console.
+   * This function should be called in the ngOnInit lifecycle hook of the component.
+   * @returns {Observable<any>} - An observable of the list of elements in the 'notes' collection.
+   */
+  subNotesList() {
+    return onSnapshot(this.getNotesRef(), (list) => {
+      this.normalNotes = [];
+      list.forEach(element => {
+        this.normalNotes.push(this.setNoteObject(element.data(), element.id));
+      });
+    });
+  }
+
+
+
+  /**
+   * Subscribes to the 'trash' collection and logs each element in the list to the console.
+   * This function should be called in the ngOnInit lifecycle hook of the component.
+   * @returns {Observable<any>} - An observable of the list of elements in the 'trash' collection.
+   */
+  subTrashList() {
+    return onSnapshot(this.getTrashRef(), (list) => {
+      this.trashNotes = [];
+      list.forEach(element => {
+        this.trashNotes.push(this.setNoteObject(element.data(), element.id));
+      });
+    });
+  }
+
+
+  /**
+   * Converts an object to a Note object.
+   * @param {object} obj The object to convert.
+   * @param {string} id The id of the Note.
+   * @returns {Note} The converted Note object.
+   */
+  setNoteObject(obj: any, id: string): Note {
+    return {
+      id: id,
+      type: obj.type || "note",
+      title: obj.title || "",
+      content: obj.content || "",
+      marked: obj.marked || false,
+    }
+  }
 
 
   /**

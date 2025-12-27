@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { NoteComponent } from './note/note.component';
 
 
-
 @Component({
   selector: 'app-note-list',
   standalone: true,
@@ -14,21 +13,58 @@ import { NoteComponent } from './note/note.component';
   templateUrl: './note-list.component.html',
   styleUrl: './note-list.component.scss'
 })
+
+
 export class NoteListComponent {
   noteList: Note[] = [];
   favFilter: "all" | "fav" = "all";
   status: "notes" | "trash" = "notes";
 
-  constructor(public noteService: NoteListService) {
+
+  /**
+   * Constructor for the NoteListComponent class.
+   * Initializes the note list component with the NoteListService.
+   * @param {NoteListService} noteService The NoteListService to use for the note list component.
+   */
+  constructor(private noteService: NoteListService) {
     this.noteList = this.getDummyData()
   }
 
-  changeFavFilter(filter:"all" | "fav"){
+
+  /**
+   * Returns the list of notes that are not in the trash.
+   * @returns {Note[]} - The list of notes that are not in the trash.
+   */
+  getList(): Note[] {
+    return this.noteService.normalNotes;
+  }
+
+  
+  /**
+   * Returns the list of notes that are in the trash.
+   * @returns {Note[]} - The list of notes that are in the trash.
+   */
+  getTrashList(): Note[] {
+    return this.noteService.trashNotes;
+  }
+
+
+  /**
+   * Changes the favorite filter of the note list.
+   * @param {string} filter The filter to change to. Either 'all' or 'fav'.
+   */
+  changeFavFilter(filter: "all" | "fav") {
     this.favFilter = filter;
   }
 
-  changeTrashStatus(){
-    if(this.status == "trash"){
+
+  /**
+   * Toggles the status of the note list between 'notes' and 'trash'.
+   * If the status is 'trash', it sets the status to 'notes'.
+   * If the status is 'notes', it sets the status to 'trash' and the favFilter to 'all'.
+   */
+  changeTrashStatus() {
+    if (this.status == "trash") {
       this.status = "notes";
     } else {
       this.status = "trash";
@@ -37,8 +73,10 @@ export class NoteListComponent {
   }
 
 
-
-
+  /**
+   * Returns a list of dummy notes.
+   * @returns {Note[]} - A list of dummy notes.
+   */
   getDummyData(): Note[] {
     return [
       {
@@ -77,5 +115,4 @@ export class NoteListComponent {
       }
     ];
   }
-
 }

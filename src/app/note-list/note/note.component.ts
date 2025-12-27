@@ -4,6 +4,7 @@ import { NoteListService } from '../../firebase-services/note-list.service'
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-note',
   standalone: true,
@@ -11,45 +12,79 @@ import { CommonModule } from '@angular/common';
   templateUrl: './note.component.html',
   styleUrl: './note.component.scss'
 })
+
+
 export class NoteComponent {
-  @Input() note!:Note;
+  @Input() note!: Note;
   edit = false;
   hovered = false;
-  
-  constructor(private noteService: NoteListService){}
 
-  changeMarkedStatus(){
+  constructor(private noteService: NoteListService) { }
+
+
+  /**
+   * Toggles the marked status of a note
+   */
+  changeMarkedStatus() {
     this.note.marked = !this.note.marked;
   }
 
-  deleteHovered(){
-    if(!this.edit){
+
+  /**
+   * Sets the hovered status of the note to false if the note is not being edited.
+   */
+  deleteHovered() {
+    if (!this.edit) {
       this.hovered = false;
     }
   }
 
-  openEdit(){
+
+  /**
+   * Opens the edit form for the note.
+   */
+  openEdit() {
     this.edit = true;
   }
 
-  closeEdit(){
+
+  /**
+   * Closes the edit form for the note and saves the note.
+   */
+  closeEdit() {
     this.edit = false;
     this.saveNote();
   }
 
-  moveToTrash(){
+
+  /**
+   * Move the note to the trash.
+   */
+  moveToTrash() {
     this.note.type = 'trash';
   }
 
-  moveToNotes(){
+
+  /**
+   * Move the note to the notes section.
+   */
+  moveToNotes() {
     this.note.type = 'note';
   }
 
-  deleteNote(){
+
+  /**
+   * Deletes the note from the note list service.
+   */
+  deleteNote() {
 
   }
 
-  saveNote(){
-    
+
+  /**
+   * Saves the note to the note list service.
+   */
+  saveNote() {
+
   }
 }
