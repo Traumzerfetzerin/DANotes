@@ -43,7 +43,12 @@ export class NoteListService {
   // const itemCollection = collection(this.firestore, 'items');
 
 
-  async addNote(item: {}) {
+  /**
+   * Adds a new note to the 'notes' collection in Firestore.
+   * @param {Note} item - The note to be added.
+   * @returns {Promise<void>} - A promise that resolves when the note has been added.
+   */
+  async addNote(item: Note) {
     await addDoc(this.getNotesRef(), item).catch(
       (err) => { console.error(err) }
     ).then(
