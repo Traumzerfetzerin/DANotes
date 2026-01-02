@@ -44,16 +44,47 @@ export class NoteListService {
 
 
   /**
-   * Updates a note in the Firestore collection with the given colId and docId.
-   * @param {string} colId - The id of the collection.
-   * @param {string} docId - The id of the document.
-   * @param {Note} item - The updated note.
-   * @returns {Promise<void>} - A promise that resolves when the note has been updated.
+   * Updates a note in the database.
+   * @param {Note} note - The note to be updated.
    */
-  async updateNote(colId: string, docId: string, item: {}) {
-    await updateDoc(this.getSingleDocRef(colId, docId), item).catch(
-      (err) => { console.log(err); }
-    ).then();
+  async updateNote(note: Note) {
+    if (note.id) {
+      let docRef = this.getSingleDocRef(this.getColIdFromNote(note), note.id);
+      await updateDoc(docRef, this.getCleanJson(note)).catch(
+        (err) => { console.log(err); }
+      );
+    }
+  }
+
+
+  /**
+   * Returns a clean JSON object representing the given note.
+   * The returned object has the following properties: type, title, content, marked.
+   * @param {Note} note - The note to get the clean JSON object for.
+   * @returns {object} - The clean JSON object representing the given note.
+   */
+  getCleanJson(note: Note): {} {
+    return {
+      type: note.type,
+      title: note.title,
+      content: note.content,
+      marked: note.marked
+    }
+  }
+
+
+  /**
+   * Returns the name of the collection based on the type of the given note.
+   * If the note is of type 'note', returns 'notes', otherwise returns 'trash'.
+   * @param {Note} note - The note to get the collection name for.
+   * @returns {string} - The name of the collection.
+   */
+  getColIdFromNote(note: Note): string {
+    if (note.type === 'note') {
+      return "notes";
+    } else {
+      return "trash";
+    }
   }
 
 
@@ -70,7 +101,7 @@ export class NoteListService {
     )
   }
 
-  
+
   /**
  * Destroys all Firestore listeners and unsubscribes from the 'items' collection.
  *This function should be called in the ngOnDestroy lifecycle hook of the component.

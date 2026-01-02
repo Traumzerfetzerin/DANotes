@@ -23,10 +23,12 @@ export class NoteComponent {
 
 
   /**
-   * Toggles the marked status of a note
+   * Toggles the marked status of the note and saves the note.
+   * @return {void} - Nothing is returned.
    */
   changeMarkedStatus() {
     this.note.marked = !this.note.marked;
+    this.saveNote();
   }
 
 
@@ -83,8 +85,9 @@ export class NoteComponent {
 
   /**
    * Saves the note to the note list service.
+   * @returns {void} - Nothing is returned.
    */
   saveNote() {
-
+    this.noteService.updateNote(this.note);
   }
 }
