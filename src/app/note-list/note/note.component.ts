@@ -63,7 +63,13 @@ export class NoteComponent {
    * Move the note to the trash.
    */
   moveToTrash() {
-    this.note.type = 'trash';
+    if (this.note.id) {
+      this.note.type = 'trash';
+      let docId = this.note.id;
+      delete this.note.id;
+      this.noteService.addNote(this.note, "trash")
+      this.noteService.deleteNote("notes", docId);
+    }
   }
 
 
@@ -79,7 +85,9 @@ export class NoteComponent {
    * Deletes the note from the note list service.
    */
   deleteNote() {
-
+    if (this.note.id) {
+      this.noteService.deleteNote("trash", this.note.id);
+    }
   }
 
 
