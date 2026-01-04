@@ -99,7 +99,7 @@ export class NoteListService {
    * @param {Note} item - The note to be added.
    * @returns {Promise<void>} - A promise that resolves when the note has been added.
    */
-  async addNote(item: Note, p0: string) {
+  async addNote(item: Note, colId: "notes" | "trash") {
     await addDoc(this.getNotesRef(), item).catch(
       (err) => { console.error(err); }
     ).then(
