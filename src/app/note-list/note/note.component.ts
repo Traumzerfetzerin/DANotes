@@ -77,7 +77,13 @@ export class NoteComponent {
    * Move the note to the notes section.
    */
   moveToNotes() {
-    this.note.type = 'note';
+    if (this.note.id) {
+      this.note.type = 'note';
+      let docId = this.note.id;
+      delete this.note.id;
+      this.noteService.addNote(this.note, "notes")
+      this.noteService.deleteNote("trash", docId);
+    }
   }
 
 

@@ -42,6 +42,12 @@ export class NoteListService {
   // const itemCollection = collection(this.firestore, 'items');
 
 
+  /**
+   * Deletes a note from the database.
+   * @param {string} colId - The id of the collection to delete the note from. One of "notes" or "trash".
+   * @param {string} docId - The id of the document to delete.
+   * @throws {Error} - If the deletion fails, an error is thrown.
+   */
   async deleteNote(colId: "notes" | "trash", docId: string) {
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
       (err) => { console.log(err) }
@@ -99,13 +105,39 @@ export class NoteListService {
    * @param {Note} item - The note to be added.
    * @returns {Promise<void>} - A promise that resolves when the note has been added.
    */
+  // async addNote(item: Note, colId: "notes" | "trash") {
+  //   await addDoc(this.getNotesRef(), item).catch(
+  //     (err) => { console.error(err); }
+  //   ).then(
+  //     (docRef) => { console.log("Document written with ID: ", docRef?.id); }
+  //   )
+  // }
+
+  
+  /**
+   * Adds a new note to the specified collection in Firestore.
+   * @param {Note} item - The note to be added.
+   * @param {string} colId - The id of the collection to add the note to. Must be either "notes" or "trash".
+   * @returns {Promise<void>} - A promise that resolves when the note has been added.
+   */
   async addNote(item: Note, colId: "notes" | "trash") {
-    await addDoc(this.getNotesRef(), item).catch(
-      (err) => { console.error(err); }
-    ).then(
-      (docRef) => { console.log("Document written with ID: ", docRef?.id); }
-    )
+    let colRef;
+
+    if (colId === "notes") {
+      colRef = this.getNotesRef();
+    } else {
+      colRef = this.getTrashRef();
+    }
+
+    await addDoc(colRef, item)
+      .then((docRef) => {
+        console.log("Document written with ID:", docRef.id);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
+
 
 
   /**
