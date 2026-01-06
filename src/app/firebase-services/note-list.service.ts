@@ -178,6 +178,24 @@ export class NoteListService {
 
 
   /**
+   * Subscribes to the 'notesExtra' subcollection of the 'notes' collection
+   * and logs each element in the list to the console.
+   * This function should be called in the ngOnInit lifecycle hook of the component.
+   * @returns {Observable<any>} - An observable of the list of elements in the 'notesExtra' subcollection.
+   */
+  // subNotesList() {
+  //   let ref = collection(this.firestore, "notes/10eu1SIdpqe7bpbbrAL8/notesExtra");
+  //   const q = query(ref, limit(100));
+  //   return onSnapshot(q, (list) => {
+  //     this.normalNotes = [];
+  //     list.forEach(element => {
+  //       this.normalNotes.push(this.setNoteObject(element.data(), element.id));
+  //     });
+  //   });
+  // }
+
+
+  /**
    * Subscribes to the 'notes' collection and logs each element in the list to the console.
    * The subscription is filtered to only include notes that are marked.
    * This function should be called in the ngOnInit lifecycle hook of the component.
